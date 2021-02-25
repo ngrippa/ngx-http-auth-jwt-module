@@ -418,7 +418,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
     ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "my fancy char %s\n", r->args.data);
     if (r->args.len > 5) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "REACED IF\n");
-        char *query = strdup (array),
+        char *query = strdup (r->args.data),
                 *tokens = query,
                 *p = query;
         while ((p = strsep (&tokens, "&\n"))) {
