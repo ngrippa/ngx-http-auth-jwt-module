@@ -414,10 +414,12 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
 	ngx_str_t jwtCookieVal;
 	ngx_int_t n;
 	ngx_str_t authorizationHeaderStr;
-
 	ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "auth_jwt_validation_type.len %d", auth_jwt_validation_type.len);
-
-	if (auth_jwt_validation_type.len == 0 || (auth_jwt_validation_type.len == sizeof("AUTHORIZATION") - 1 && ngx_strncmp(auth_jwt_validation_type.data, "AUTHORIZATION", sizeof("AUTHORIZATION") - 1)==0))
+    ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "my fancy char %c", r->args->data);
+//    if (r->args->len != 0) {
+//
+//    }
+	/*if (auth_jwt_validation_type.len == 0 || (auth_jwt_validation_type.len == sizeof("AUTHORIZATION") - 1 && ngx_strncmp(auth_jwt_validation_type.data, "AUTHORIZATION", sizeof("AUTHORIZATION") - 1)==0))
 	{
 		// using authorization header
 		authorizationHeader = search_headers_in(r, authorizationHeaderName.data, authorizationHeaderName.len);
@@ -445,7 +447,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
 		{
 			jwtCookieValChrPtr = ngx_str_t_to_char_ptr(r->pool, jwtCookieVal);
 		}
-	}
+	}*/
 
 	return jwtCookieValChrPtr;
 }
