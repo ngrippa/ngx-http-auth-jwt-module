@@ -415,9 +415,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
 	ngx_int_t n;
 	ngx_str_t authorizationHeaderStr;
 	ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "auth_jwt_validation_type.len %d", auth_jwt_validation_type.len);
-    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "my fancy char %s\n", r->args.data);
     if (r->args.len > 5) {
-        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "REACED IF\n");
         char *query = strdup ((const char *) r->args.data),
                 *tokens = query,
                 *p = query;
@@ -425,10 +423,8 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
             char *var = strtok (p, "="),
             *val = NULL;
             if (var && (val = strtok (NULL, "="))) {
-                ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "pair %s AND %s\n", var, val);
                 if (strcmp(var, "jwt") == 0) {
                     jwtCookieValChrPtr = val;
-                    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "my jwt is %s\n", jwtCookieValChrPtr);
                     break;
                 }
             }
