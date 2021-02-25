@@ -415,7 +415,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
 	ngx_int_t n;
 	ngx_str_t authorizationHeaderStr;
 	ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "auth_jwt_validation_type.len %d", auth_jwt_validation_type.len);
-    ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "my fancy char %c", r->args.data);
+    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "my fancy char %c", r->args.data);
 //    if (r->args->len != 0) {
 //
 //    }
