@@ -419,15 +419,15 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
         char *query = strdup ((const char *) r->args.data),
                 *tokens = query,
                 *p = query;
-        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "data  %s END\n", r->args.data);
-        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "query string  %s END\n", query);
+        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "data  %s END\n\n\n\n", r->args.data);
+        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "query string  %s END\n\n\n\n", query);
         while ((p = strsep (&tokens, "&\n"))) {
             char *var = strtok (p, "="),
                     *val = NULL;
             if (var && (val = strtok (NULL, "="))) {
                 if (strcmp(var, "jwt") == 0) {
                     jwtCookieValChrPtr = val;
-                    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "found token  %s END\n", jwtCookieValChrPtr);
+                    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "found token  %s END\n\n\n\n", jwtCookieValChrPtr);
                     break;
                 }
             }
@@ -462,7 +462,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
             jwtCookieValChrPtr = ngx_str_t_to_char_ptr(r->pool, jwtCookieVal);
         }
     }
-    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "parsed token %s END\n ", jwtCookieValChrPtr);
+    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "parsed token %s END\n\n\n ", jwtCookieValChrPtr);
     return jwtCookieValChrPtr;
 }
 
