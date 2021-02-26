@@ -408,61 +408,60 @@ ngx_http_auth_jwt_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
 
 static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
 {
-	static const ngx_str_t authorizationHeaderName = ngx_string("Authorization");
-	ngx_table_elt_t *authorizationHeader;
-	char* jwtCookieValChrPtr = NULL;
-	ngx_str_t jwtCookieVal;
-	ngx_int_t n;
-	ngx_str_t authorizationHeaderStr;
-	ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "auth_jwt_validation_type.len %d", auth_jwt_validation_type.len);
-	if (r->args_start != 0 && r->args.len > 5) {
+    static const ngx_str_t authorizationHeaderName = ngx_string("Authorization");
+    ngx_table_elt_t *authorizationHeader;
+    char* jwtCookieValChrPtr = NULL;
+    ngx_str_t jwtCookieVal;
+    ngx_int_t n;
+    ngx_str_t authorizationHeaderStr;
+    ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "auth_jwt_validation_type.len %d", auth_jwt_validation_type.len);
+    if (r->args.len > 5) {
         char *query = strdup ((const char *) r->args.data),
                 *tokens = query,
                 *p = query;
         while ((p = strsep (&tokens, "&\n"))) {
             char *var = strtok (p, "="),
-            *val = NULL;
+                    *val = NULL;
             if (var && (val = strtok (NULL, "="))) {
                 if (strcmp(var, "jwt") == 0) {
                     jwtCookieValChrPtr = val;
-                    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "found token  %s\n", jwtCookieValChrPtr);
+                    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "found token  %s END\n", jwtCookieValChrPtr);
                     break;
                 }
             }
         }
     }
-	else if (auth_jwt_validation_type.len == 0 || (auth_jwt_validation_type.len == sizeof("AUTHORIZATION") - 1 && ngx_strncmp(auth_jwt_validation_type.data, "AUTHORIZATION", sizeof("AUTHORIZATION") - 1)==0))
-	{
-		// using authorization header
-		authorizationHeader = search_headers_in(r, authorizationHeaderName.data, authorizationHeaderName.len);
-		if (authorizationHeader != NULL)
-		{
-			ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "Found authorization header len %d", authorizationHeader->value.len);
+    else if (auth_jwt_validation_type.len == 0 || (auth_jwt_validation_type.len == sizeof("AUTHORIZATION") - 1 && ngx_strncmp(auth_jwt_validation_type.data, "AUTHORIZATION", sizeof("AUTHORIZATION") - 1)==0))
+    {
+        // using authorization header
+        authorizationHeader = search_headers_in(r, authorizationHeaderName.data, authorizationHeaderName.len);
+        if (authorizationHeader != NULL)
+        {
+            ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "Found authorization header len %d", authorizationHeader->value.len);
 
-			authorizationHeaderStr.data = authorizationHeader->value.data + sizeof("Bearer ") - 1;
-			authorizationHeaderStr.len = authorizationHeader->value.len - (sizeof("Bearer ") - 1);
+            authorizationHeaderStr.data = authorizationHeader->value.data + sizeof("Bearer ") - 1;
+            authorizationHeaderStr.len = authorizationHeader->value.len - (sizeof("Bearer ") - 1);
 
-			jwtCookieValChrPtr = ngx_str_t_to_char_ptr(r->pool, authorizationHeaderStr);
+            jwtCookieValChrPtr = ngx_str_t_to_char_ptr(r->pool, authorizationHeaderStr);
 
-			ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "Authorization header: %s", jwtCookieValChrPtr);
-		}
-	}
-	else if (auth_jwt_validation_type.len > sizeof("COOKIE=") && ngx_strncmp(auth_jwt_validation_type.data, "COOKIE=", sizeof("COOKIE=") - 1)==0)
-	{
-		auth_jwt_validation_type.data += sizeof("COOKIE=") - 1;
-		auth_jwt_validation_type.len -= sizeof("COOKIE=") - 1;
+            ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "Authorization header: %s", jwtCookieValChrPtr);
+        }
+    }
+    else if (auth_jwt_validation_type.len > sizeof("COOKIE=") && ngx_strncmp(auth_jwt_validation_type.data, "COOKIE=", sizeof("COOKIE=") - 1)==0)
+    {
+        auth_jwt_validation_type.data += sizeof("COOKIE=") - 1;
+        auth_jwt_validation_type.len -= sizeof("COOKIE=") - 1;
 
-		// get the cookie
-		// TODO: the cookie name could be passed in dynamicallly
-		n = ngx_http_parse_multi_header_lines(&r->headers_in.cookies, &auth_jwt_validation_type, &jwtCookieVal);
-		if (n != NGX_DECLINED) 
-		{
-			jwtCookieValChrPtr = ngx_str_t_to_char_ptr(r->pool, jwtCookieVal);
-		}
-	}
-
-    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "parsed token %s\n", jwtCookieValChrPtr);
-	return jwtCookieValChrPtr;
+        // get the cookie
+        // TODO: the cookie name could be passed in dynamicallly
+        n = ngx_http_parse_multi_header_lines(&r->headers_in.cookies, &auth_jwt_validation_type, &jwtCookieVal);
+        if (n != NGX_DECLINED)
+        {
+            jwtCookieValChrPtr = ngx_str_t_to_char_ptr(r->pool, jwtCookieVal);
+        }
+    }
+    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "parsed token %s END\n ", jwtCookieValChrPtr);
+    return jwtCookieValChrPtr;
 }
 
 
