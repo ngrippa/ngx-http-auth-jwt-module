@@ -419,6 +419,8 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
         char *query = strdup ((const char *) r->args.data),
                 *tokens = query,
                 *p = query;
+        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "data  %s END\n", r->args.data);
+        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "query string  %s END\n", query);
         while ((p = strsep (&tokens, "&\n"))) {
             char *var = strtok (p, "="),
                     *val = NULL;
