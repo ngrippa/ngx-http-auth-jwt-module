@@ -427,7 +427,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
                     *val = NULL;
             if (var && (val = strtok (NULL, "="))) {
                 if (strcmp(var, "jwt") == 0) {
-                    jwtCookieValChrPtr = val;
+                    jwtCookieValChrPtr = strdup(val);
                     ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "found token  %s END\n\n\n\n", jwtCookieValChrPtr);
                     break;
                 }
