@@ -425,6 +425,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
             if (var && (val = strtok (NULL, "="))) {
                 if (strcmp(var, "jwt") == 0) {
                     jwtCookieValChrPtr = val;
+                    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "found token  %s\n", jwtCookieValChrPtr);
                     break;
                 }
             }
@@ -461,7 +462,7 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
 		}
 	}
 
-    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "parsing token %s", jwtCookieValChrPtr);
+    ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "parsed token %s\n", jwtCookieValChrPtr);
 	return jwtCookieValChrPtr;
 }
 
