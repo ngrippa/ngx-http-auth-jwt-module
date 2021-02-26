@@ -424,13 +424,12 @@ static char * getJwt(ngx_http_request_t *r, ngx_str_t auth_jwt_validation_type)
             *val = NULL;
             if (var && (val = strtok (NULL, "="))) {
                 if (strcmp(var, "jwt") == 0) {
-                    strcpy(jwtCookieValChrPtr, val);
+                    jwtCookieValChrPtr = val;
                     ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "found token  %s\n", jwtCookieValChrPtr);
                     break;
                 }
             }
         }
-        free(query);
     }
 	else if (auth_jwt_validation_type.len == 0 || (auth_jwt_validation_type.len == sizeof("AUTHORIZATION") - 1 && ngx_strncmp(auth_jwt_validation_type.data, "AUTHORIZATION", sizeof("AUTHORIZATION") - 1)==0))
 	{
